@@ -29,9 +29,11 @@ jobs:
         with:
           release-type: node
           package-name: demo-workspace
+          token: ${{ secrets.GH_TOKEN }}
   publish:
     needs:
       - release
+      - test
     runs-on: ubuntu-latest
     name: 🚀 Deploy
     if: ${{ needs.release.outputs.releases_created }}
