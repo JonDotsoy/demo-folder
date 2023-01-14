@@ -8,3 +8,4 @@ cjs
 esm
 !.prettierrc.yml
 *.tgz
+!.npmignore

@@ -1,0 +1,11 @@
+.editorconfig
+.github/
+.husky/
+.prettierignore
+.prettierrc.yml
+.vscode/
+commitlint.config.cjs
+rollup.config.mts
+tests/
+tsconfig*.json
+*.tgz
