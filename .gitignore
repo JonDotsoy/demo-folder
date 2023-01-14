@@ -7,3 +7,4 @@ node_modules
 cjs
 esm
 !.prettierrc.yml
+*.tgz
