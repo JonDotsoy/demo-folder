@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "types": "./esm/demo-workspace.d.mts",
   "exports": {
     "import": "./esm/demo-workspace.mjs",
     "require": "./cjs/demo-workspace.cjs"
