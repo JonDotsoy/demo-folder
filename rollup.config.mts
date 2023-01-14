@@ -1,5 +1,5 @@
-import { RollupOptions } from "rollup";
 import rollupTypescript from "@rollup/plugin-typescript";
+import { RollupOptions } from "rollup";
 
 const config: RollupOptions = {
   input: "src/demo-workspace.mts",

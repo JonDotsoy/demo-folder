@@ -31,6 +31,7 @@
     "commitlint": "^17.4.2",
     "husky": "^8.0.3",
     "prettier": "^2.8.3",
+    "prettier-plugin-organize-imports": "^3.2.2",
     "rollup": "^3.10.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",

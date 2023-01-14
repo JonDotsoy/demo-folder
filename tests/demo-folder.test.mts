@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, statSync } from "fs";
-import { describe, expect, it, vitest } from "vitest";
-import { demoWorkspace, getCallingFile } from "../src/demo-workspace.mjs";
+import { expect, it } from "vitest";
+import { demoWorkspace } from "../src/demo-workspace.mjs";
 
 it("should create a directory", (ctx) => {
   const workspace = demoWorkspace({ workspaceName: ctx.meta.name });
