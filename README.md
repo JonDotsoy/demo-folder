@@ -17,10 +17,16 @@ import { demoWorkspace } from "@jondotsoy/demo-workspace";
 
 const workspace = demoWorkspace();
 
-workspace.file(
+const file = workspace.file(
   "sample.ts",
   `
     console.log("OK");
   `
 );
+
+console.log(file)
+// =>
+// {
+//   location: new URL('file:./__demos__/index/sample.ts')
+// }
 ```
