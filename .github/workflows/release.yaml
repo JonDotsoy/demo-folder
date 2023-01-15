@@ -28,7 +28,7 @@ jobs:
         id: release
         with:
           release-type: node
-          package-name: demo-workspace
+          package-name: release-please-action
   publish:
     needs:
       - release
