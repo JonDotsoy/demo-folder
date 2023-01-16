@@ -31,6 +31,7 @@
     "@types/node": "^18.11.18",
     "commitlint": "^17.4.2",
     "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
     "prettier": "^2.8.3",
     "prettier-plugin-organize-imports": "^3.2.2",
     "rollup": "^3.10.0",
@@ -42,5 +43,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/JonDotsoy/demo-workspace.git"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }

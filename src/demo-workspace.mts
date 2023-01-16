@@ -44,6 +44,101 @@ const serialize = (str: string) =>
     .map((code) => `[0x${code.toString(16)}]`)
     .join("");
 
+const cleanIndent = (str: string, insertFinalNewline: boolean = true) => {
+  if (str.startsWith("\n")) {
+    const [, indent] = /^\n(\s+)/.exec(str)!;
+    return str
+      .slice(1)
+      .split("\n")
+      .map((line, index, lines): string | null => {
+        if (index === lines.length - 1 && /^\s+$/.test(line))
+          return insertFinalNewline ? "" : null;
+        if (!line.startsWith(indent))
+          throw new Error(
+            `Failed cleaning indent. Line ${index + 1
+            } expected an indent of ${indent.length} length`
+          );
+        return line.slice(indent.length);
+      })
+      .filter((e) => e !== null)
+      .join("\n");
+  }
+
+  return str;
+};
+
+export class File {
+  readonly location: URL
+  readonly options: DemoFileOptions
+
+  constructor(
+    cwd: URL,
+    relativeLocation: string,
+    options?: string | DemoFileOptions
+  ) {
+    const opts = toDemoFileOptions(options);
+    this.options = {
+      contentType: opts.contentType ?? "text",
+      body: opts?.body ?? "",
+      insertFinalNewline: opts?.insertFinalNewline ?? true,
+    };
+    this.location = new URL(relativeLocation, cwd);
+  }
+
+  writeFileSync() {
+    mkdirSync(new URL(".", this.location), { recursive: true });
+    writeFileSync(this.location, this.toUint8Array());
+  }
+
+  toUint8Array() {
+    const stringify = (contentType: ContentType, payload: any): string => {
+      switch (contentType) {
+        case "json":
+          return JSON.stringify(payload, null, 2);
+        case "text":
+          return cleanIndent(payload, this.options.insertFinalNewline);
+      }
+    };
+
+    const initialBuffer: Uint8Array = new TextEncoder().encode(
+      stringify(this.options.contentType, this.options.body)
+    );
+
+    return initialBuffer;
+  }
+}
+
+export class Workspace {
+  constructor(
+    readonly location: URL,
+  ) { }
+
+  get cwd() { return this.location }
+
+  mkdirSync() {
+    mkdirSync(this.location, { recursive: true })
+  }
+
+  file(relativeLocation: string, options?: string | DemoFileOptions) {
+    const file = new File(this.location, relativeLocation, options)
+
+    file.writeFileSync()
+
+    return file;
+  }
+
+  makeTree(tree: Record<string, string>): Record<string, URL> {
+    return Object.fromEntries(Object.entries(tree).map(([key, option]) => {
+      const file = this.file(key, option)
+      file.writeFileSync()
+      return [
+        key,
+        file.location,
+      ]
+    }))
+  }
+}
+
 export const demoWorkspace = (options?: DemoFolderOptions) => {
   const filepath = getCallingFile();
   const applyGitIgnore = options?.applyGitIgnore ?? true;
@@ -60,15 +155,15 @@ export const demoWorkspace = (options?: DemoFolderOptions) => {
     new URL(filepath, "file://")
   );
 
-  const file = makeDemoFile(cwd);
+  const workspace = new Workspace(cwd)
 
-  mkdirSync(cwd, { recursive: true });
+  workspace.mkdirSync();
 
   if (applyGitIgnore) {
-    file(".gitignore", "*");
+    workspace.file(".gitignore", "*").writeFileSync();
   }
 
-  return { location: cwd, cwd, file };
+  return workspace
 };
 
 interface DemoFileOptions {
@@ -85,53 +180,3 @@ const toDemoFileOptions = (
   return options ?? { contentType: "text", body: "" };
 };
 
-const makeDemoFile =
-  (cwd: URL) => (relativePath: string, options?: string | DemoFileOptions) => {
-    const opts = toDemoFileOptions(options);
-    const contentType = opts.contentType ?? "text";
-    const payload = opts?.body ?? "";
-    const insertFinalNewline = opts?.insertFinalNewline ?? true;
-    const url = new URL(relativePath, cwd);
-
-    const cleanIndent = (str: string) => {
-      if (str.startsWith("\n")) {
-        const [, indent] = /^\n(\s+)/.exec(str)!;
-        return str
-          .slice(1)
-          .split("\n")
-          .map((line, index, lines): string | null => {
-            if (index === lines.length - 1 && /^\s+$/.test(line))
-              return insertFinalNewline ? "" : null;
-            if (!line.startsWith(indent))
-              throw new Error(
-                `Failed cleaning indent. Line ${
-                  index + 1
-                } expected an indent of ${indent.length} length`
-              );
-            return line.slice(indent.length);
-          })
-          .filter((e) => e !== null)
-          .join("\n");
-      }
-
-      return str;
-    };
-
-    const stringify = (contentType: ContentType, payload: any): string => {
-      switch (contentType) {
-        case "json":
-          return JSON.stringify(payload, null, 2);
-        case "text":
-          return cleanIndent(payload);
-      }
-    };
-
-    const initialBuffer: Uint8Array = new TextEncoder().encode(
-      stringify(contentType, payload)
-    );
-
-    mkdirSync(new URL(".", url), { recursive: true });
-    writeFileSync(url, initialBuffer);
-
-    return { location: url };
-  };

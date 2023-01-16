@@ -46,3 +46,30 @@ it("should create a JSON file", (ctx) => {
     '"{}"'
   );
 });
+
+
+it('should use syntax to make tree directory', (ctx) => {
+  const workspace = demoWorkspace({ workspaceName: ctx.meta.name });
+
+  const tree = workspace.makeTree({
+    'README.md': `
+      # Sample
+    `,
+    'src/index.ts': `
+      console.log('Ok')
+    `,
+    'src/configs.json': JSON.stringify({
+      foo: 'baz',
+    }),
+  })
+
+  expect(tree).toBeTypeOf('object')
+  expect(tree).not.toBeNull()
+  const keysFiles = ['README.md', 'src/index.ts', 'src/configs.json'] as const;
+  expect(tree).keys(keysFiles)
+  for (const key of keysFiles) {
+    expect(tree[key]).instanceOf(URL)
+    expect(existsSync(tree[key])).toBeTruthy()
+    expect(statSync(tree[key]).isFile()).toBeTruthy()
+  }
+})
