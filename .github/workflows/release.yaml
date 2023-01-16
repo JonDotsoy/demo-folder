@@ -19,6 +19,6 @@ jobs:
       - run: npm ci
       - name: Configure NPM
         run: |
-          npm config set @jondotsoy:registry https://registry.npmjs.org/
-          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NODE_AUTH_TOKEN }}
+          npm config -g set @jondotsoy:registry https://registry.npmjs.org/
+          npm config -g set //registry.npmjs.org/:_authToken ${{ secrets.NODE_AUTH_TOKEN }}
       - run: npm publish --tag latest
