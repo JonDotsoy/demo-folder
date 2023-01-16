@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/JonDotsoy/demo-workspace/compare/v1.0.0...v1.1.0) (2023-01-16)
+
+
+### Features
+
+* add tree function ([f224226](https://github.com/JonDotsoy/demo-workspace/commit/f224226f2b6ec0bd60dd6b206dcd803c07ec4171))
+
 ## 1.0.0 (2023-01-15)
 
 
