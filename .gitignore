@@ -9,3 +9,4 @@ esm
 !.prettierrc.yml
 *.tgz
 !.npmignore
+.npmrc

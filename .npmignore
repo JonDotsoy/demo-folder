@@ -9,3 +9,4 @@ rollup.config.mts
 tests/
 tsconfig*.json
 *.tgz
+.npmrc
