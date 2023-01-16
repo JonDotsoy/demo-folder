@@ -45,6 +45,8 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: |
+      - name: Configure NPM
+        run: |
+          npm config set @jondotsoy:registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken ${{ secrets.NODE_AUTH_TOKEN }}
       - run: npm publish --access public --tag latest
