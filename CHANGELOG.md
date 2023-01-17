@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/JonDotsoy/demo-workspace/compare/v1.1.2...v1.1.3) (2023-01-17)
+
+
+### Miscellaneous Chores
+
+* release 1.1.3 ([2c898e1](https://github.com/JonDotsoy/demo-workspace/commit/2c898e1f78eed6df10ecd478e3994972b7aa4d6b))
+
 ## [1.1.2](https://github.com/JonDotsoy/demo-workspace/compare/v1.1.1...v1.1.2) (2023-01-16)
 
 
